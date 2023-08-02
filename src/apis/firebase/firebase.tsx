@@ -1,3 +1,5 @@
+import { OneHistory } from 'domain/OneHistory';
+import { NfcUserInfo } from 'domain/nfcUserInfo';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import {
@@ -7,7 +9,9 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
+  getDoc,
 } from 'firebase/firestore';
+
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -17,33 +21,50 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
-export interface UserInfo {
-  desc: string;
-  name: string;
-  number: number[];
-}
+
 firebase.initializeApp(firebaseConfig);
 
 const fireStore = firebase.firestore();
 
-const initFood = async (user: UserInfo) => {
-  const stationRef = doc(fireStore, 'info', `food${user.name}`);
+const testSetData = async (type: string | null, id: string) => {
+  const stationRef = doc(
+    fireStore,
+    'DBWD_WebCollection',
+    type ?? '',
+    'nfcUserInfos',
+    id,
+  );
 
-  await setDoc(stationRef, { ...user });
+  await setDoc(stationRef, { id });
 };
 
-const updataFood = async (number: number, name: string) => {
-  const stationRef = doc(fireStore, 'info', `food${name}`);
+const testReadData: (
+  typeStr: string,
+  id: string,
+) => Promise<NfcUserInfo | null> = async (typeStr: string, id: string) => {
+  const stationRef = doc(fireStore, 'test', typeStr, 'nfcUserInfos', id);
+  const docSnap = await getDoc(stationRef);
 
-  await updateDoc(stationRef, { number: arrayUnion(6) });
-  // Atomically add a new region to the "regions" array field.
-  // await updateDoc(stationRef, { number: arrayUnion(6) });
-
-  // Atomically remove a region from the "regions" array field.
-  // await updateDoc(stationRef, { number: arrayRemove(6) });
+  if (docSnap.exists()) {
+    return NfcUserInfo.fromData(id, typeStr, docSnap.data());
+  } else {
+    return null;
+  }
 };
-const deleteFood = async (name: string) => {
-  await deleteDoc(doc(fireStore, 'info', `food${name}`));
-};
 
-export { fireStore, initFood, deleteFood, updataFood };
+// const testUpdateData = async (testInfoId: string | null) => {
+//   const stationRef = doc(fireStore, 'info', `food${name}`);
+
+//   await updateDoc(stationRef, { name: '멜론', number: number });
+// };
+
+// const updataFood = async (number: number[], name: string) => {
+//   const stationRef = doc(fireStore, 'info', `food${name}`);
+
+//   await updateDoc(stationRef, { name: '멜론', number: number });
+
+// };
+// const deleteFood = async (name: string) => {
+//   await deleteDoc(doc(fireStore, 'info', `food${name}`));
+// };
+export { fireStore, testSetData, testReadData };

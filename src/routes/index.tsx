@@ -16,6 +16,7 @@ import FilePage from 'pages/files/FilePage';
 import LayoutPage from 'pages/layout/LayoutPage';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import TestPage from 'pages/layout/TestPage';
 
 export default function Router() {
   return (
@@ -24,6 +25,7 @@ export default function Router() {
         {/* 인증 여부 상광 없이 접속 가능한 페이지 정의 */}
         {/* <Route index element={<DefaultLayout><MainPage/></DefaultLayout>}/> */}
         <Route index element={<MainPage />} />
+        <Route path="/test" element={<TestPage />} />
         <Route path="/layout" element={<LayoutPage />} />
         <Route path="/files" element={<FilePage />} />
 
