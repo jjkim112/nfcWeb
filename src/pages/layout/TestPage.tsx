@@ -12,18 +12,25 @@ import {
 
 export default function TestPage() {
   const [serachParams, setSerachParams] = useSearchParams();
+  const [location, setLocation] = useState<object>();
 
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const params = useParams();
 
   const testId: string | null = serachParams.get('id');
 
-  function getLocation() {
+  function setLocationData() {
     if (navigator.geolocation) {
       // GPS를 지원하면
       navigator.geolocation.getCurrentPosition(
         function (position) {
+          const { latitude, longitude } = position.coords;
+
+          setLocation({
+            latitude,
+            longitude,
+          });
           console.log(
             position.coords.latitude +
               ' ' +
@@ -31,6 +38,8 @@ export default function TestPage() {
               ' ' +
               position.timestamp,
           );
+
+          console.log(location);
         },
         function (error) {
           console.error(error);
@@ -60,7 +69,7 @@ export default function TestPage() {
 
   useEffect(() => {
     _testFunc();
-    getLocation();
+    setLocationData();
   }, []);
 
   return (
