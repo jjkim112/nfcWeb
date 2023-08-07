@@ -44,17 +44,28 @@ export class NfcUserInfo {
     }
   }
 
-  toMapForFirebase(): Map<string, any> {
-    const temporaryMap = new Map();
-    temporaryMap.set('id', this.id);
-    // temporaryMap.set('type', this.type);
-    // temporaryMap.set('tagCount', this.tagCount);
-    temporaryMap.set(
-      'histories',
-      this.histories.map((v, i) => {
-        return v.toMapForFireBaseConsideringMultiple();
-      }),
-    );
-    return temporaryMap;
+  // //이전에 이렇게 했었음
+  // toMapForFirebase(): Map<string, any> {
+  //   const temporaryMap = new Map();
+  //   temporaryMap.set('id', this.id);
+  //   // temporaryMap.set('type', this.type);
+  //   // temporaryMap.set('tagCount', this.tagCount);
+  //   temporaryMap.set(
+  //     'histories',
+  //     this.histories.map((v, i) => {
+  //       return v.toMapForFireBase();
+  //     }),
+  //   );
+  //   return temporaryMap;
+  // }
+  toMapForFirebase(): any {
+    const OneHistoryList = this.histories.map((v, _) => {
+      return v.toMapForFireBase();
+    });
+
+    return {
+      id: this.id,
+      histories: OneHistoryList,
+    };
   }
 }

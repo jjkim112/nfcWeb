@@ -24,7 +24,7 @@ export class OneHistory {
   }
   // Firestore data converter
 
-  toMapForFireBaseConsideringMultiple(): any {
+  toMapForFireBase(): any {
     return {
       lat: this.lat,
       lon: this.lon,

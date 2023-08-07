@@ -6,26 +6,13 @@ import {
 import { OneHistory } from 'domain/OneHistory';
 import { NfcUserInfo } from 'domain/nfcUserInfo';
 import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
-import {
-  useLocation,
-  useParams,
-  useNavigate,
-  useSearchParams,
-  redirect,
-} from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 export default function TestPage() {
   const [serachParams, setSerachParams] = useSearchParams();
-  // const [location, setLocation] = useState<object>();
-  const [oneHistoryData, setOneHistoryData] = useState<OneHistory>();
-  const [oneHistoryDataForFireBase, setOneHistoryDataForFireBase] =
-    useState<Map<string, any>>();
-
-  const navigate = useNavigate();
-  // const location = useLocation();
-  const params = useParams();
-
+  const [testBool, setTestBool] = useState(false);
   function getPosition(): Promise<any> {
     return new Promise((resolve, reject) =>
       navigator.geolocation.getCurrentPosition(resolve, reject),
@@ -89,53 +76,21 @@ export default function TestPage() {
       '4981d82551390',
       newHistoryData,
     );
-    console.log(isSuccess);
+
+    setTestBool(isSuccess);
+
     //3-2.firebase에서 제공하는 arrayUnion 활용하기
+
     //4. 리다이렉트 하기
-    if (isSuccess) {
-      redirect('/home');
-    } else {
-      // alert('Fail!!!');
-    }
   }
 
-  // function setLocationData() {
-  //   if (navigator.geolocation) {
-  //     // GPS를 지원하면
-  //     navigator.geolocation.getCurrentPosition(
-  //       function (position) {
-  //         // const { latitude, longitude } = position.coords;
-
-  //         const [lat, lon, updateTime] = [
-  //           position.coords.latitude,
-  //           position.coords.longitude,
-  //           new Date(Number(position.timestamp) * 1000),
-  //         ];
-
-  //         setOneHistoryData(new OneHistory(lat, lon, updateTime));
-
-  //         const testaaaa = oneHistoryData?.toMap();
-
-  //         setOneHistoryDataForFireBase(testaaaa);
-  //       },
-  //       function (error) {
-  //         console.error(error);
-  //       },
-  //       {
-  //         enableHighAccuracy: false,
-  //         maximumAge: 0,
-  //         timeout: Infinity,
-  //       },
-  //     );
-  //   } else {
-  //     alert('GPS를 지원하지 않습니다');
-  //   }
-  // }
-
   useEffect(() => {
-    console.log('11111');
     mainFunction();
   }, []);
+
+  if (testBool) {
+    return <Navigate to="/" replace={true} />;
+  }
 
   return <div>테스트중입니다</div>;
 }

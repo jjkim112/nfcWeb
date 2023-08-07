@@ -49,7 +49,7 @@ const testSetData: (
       .doc(id)
       .set({
         histories: historiesData?.map((v, i) => {
-          return v.toMapForFireBaseConsideringMultiple();
+          return v.toMapForFireBase();
         }),
         id: id,
       });
@@ -102,7 +102,7 @@ export const testUpdateData: (
       .doc(id)
       .update({
         histories: historiesData?.map((v, i) => {
-          return v.toMapForFireBaseConsideringMultiple();
+          return v.toMapForFireBase();
         }),
       });
 
@@ -112,17 +112,6 @@ export const testUpdateData: (
     return false;
   }
 };
-
-// const testUpdateData = async (testInfoId: string | null) => {
-//   const stationRef = doc(fireStore, 'info', `food${name}`);
-
-//   await updateDoc(stationRef, { name: '멜론', number: number });
-// };
-
-// const updataFood = async (number: number[], name: string) => {
-//   const stationRef = doc(fireStore, 'info', `food${name}`);
-
-//   await updateDoc(stationRef, { name: '멜론', number: number });
 
 // };
 // const deleteFood = async (name: string) => {
