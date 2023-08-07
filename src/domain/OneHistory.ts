@@ -1,9 +1,11 @@
+import { Timestamp } from 'firebase/firestore';
+
 export class OneHistory {
   lat: number | null;
   lon: number | null;
-  updateTime: Date;
+  updateTime: Date | null;
 
-  constructor(lat: number | null, lon: number | null, updateTime: Date) {
+  constructor(lat: number | null, lon: number | null, updateTime: Date | null) {
     this.lat = lat;
     this.lon = lon;
     this.updateTime = updateTime;
@@ -13,20 +15,20 @@ export class OneHistory {
       return new OneHistory(
         data['lat'],
         data['lon'],
-        new Date(Number(data['updateTime']) * 1000),
+        (data['updateTime'] as Timestamp).toDate(),
       );
     } catch (e) {
       console.log(`[OneHistory.fromData] ${e}`);
       return new OneHistory(0, 0, new Date(0));
     }
   }
+  // Firestore data converter
 
-  toMap(): Map<string, any> {
-    const temporaryInTempMap = new Map();
-    temporaryInTempMap.set('lat', this.lat);
-    temporaryInTempMap.set('lon', this.lon);
-    temporaryInTempMap.set('updateTime', this.updateTime);
-
-    return temporaryInTempMap;
+  toMapForFireBaseConsideringMultiple(): any {
+    return {
+      lat: this.lat,
+      lon: this.lon,
+      updateTime: this.updateTime,
+    };
   }
 }

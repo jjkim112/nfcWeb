@@ -26,29 +26,90 @@ firebase.initializeApp(firebaseConfig);
 
 const fireStore = firebase.firestore();
 
-const testSetData = async (type: string | null, id: string) => {
-  const stationRef = doc(
-    fireStore,
-    'DBWD_WebCollection',
-    type ?? '',
-    'nfcUserInfos',
-    id,
-  );
+const testSetData: (
+  uid: string,
+  id: string,
+  newHistoryData: OneHistory,
+) => Promise<boolean> = async (
+  uid: string,
+  id: string,
+  newHistoryData: OneHistory,
+) => {
+  try {
+    const previousData = await testReadData(uid, id);
 
-  await setDoc(stationRef, { id });
+    const historiesData = previousData?.histories;
+
+    historiesData?.push(newHistoryData);
+
+    await fireStore
+      .collection('categories')
+      .doc(uid)
+      .collection('products')
+      .doc(id)
+      .set({
+        histories: historiesData?.map((v, i) => {
+          return v.toMapForFireBaseConsideringMultiple();
+        }),
+        id: id,
+      });
+
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
 
 const testReadData: (
-  typeStr: string,
+  typeId: string,
   id: string,
-) => Promise<NfcUserInfo | null> = async (typeStr: string, id: string) => {
-  const stationRef = doc(fireStore, 'test', typeStr, 'nfcUserInfos', id);
+) => Promise<NfcUserInfo | null> = async (typeId: string, id: string) => {
+  const stationRef = doc(fireStore, 'categories', typeId, 'products', id);
   const docSnap = await getDoc(stationRef);
 
   if (docSnap.exists()) {
-    return NfcUserInfo.fromData(id, typeStr, docSnap.data());
+    return NfcUserInfo.fromData(id, typeId, docSnap.data());
   } else {
     return null;
+  }
+};
+
+export const testUpdateData: (
+  uid: string,
+  id: string,
+  newHistoryData: OneHistory,
+) => Promise<boolean> = async (
+  uid: string,
+  id: string,
+  newHistoryData: OneHistory,
+) => {
+  try {
+    const previousData = await testReadData(uid, id);
+    console.log(
+      previousData?.histories.map((v, _) => {
+        return v.updateTime;
+      }),
+    );
+
+    const historiesData = previousData?.histories;
+
+    historiesData?.push(newHistoryData);
+
+    await fireStore
+      .collection('categories')
+      .doc(uid)
+      .collection('products')
+      .doc(id)
+      .update({
+        histories: historiesData?.map((v, i) => {
+          return v.toMapForFireBaseConsideringMultiple();
+        }),
+      });
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 };
 

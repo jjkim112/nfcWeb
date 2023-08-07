@@ -2,19 +2,19 @@ import { OneHistory } from './OneHistory';
 
 export class NfcUserInfo {
   id: string;
-  type: string;
-  tagCount: number;
+  // type: string;
+  // tagCount: number;
   histories: OneHistory[];
 
   constructor(
     id: string,
-    type: string,
-    tagCount: number,
+    // type: string,
+    // tagCount: number,
     histories: OneHistory[],
   ) {
     this.id = id;
-    this.type = type;
-    this.tagCount = tagCount;
+    // this.type = type;
+    // this.tagCount = tagCount;
     this.histories = histories;
   }
   static fromData(id: string, type: string, data: any): NfcUserInfo | null {
@@ -35,22 +35,24 @@ export class NfcUserInfo {
         return OneHistory.fromData(v);
       });
 
-      return new NfcUserInfo(id, type, histories.length, histories);
+      // return new NfcUserInfo(id, type, histories.length, histories);
+      return new NfcUserInfo(id, histories);
     } catch (e) {
       console.log(`[NfcUserInfo.fromData] ${e}`);
-      return new NfcUserInfo(id, type, 0, []);
+      // return new NfcUserInfo(id, type, 0, []);
+      return new NfcUserInfo(id, []);
     }
   }
 
   toMapForFirebase(): Map<string, any> {
     const temporaryMap = new Map();
     temporaryMap.set('id', this.id);
-    temporaryMap.set('type', this.type);
-    temporaryMap.set('tagCount', this.tagCount);
+    // temporaryMap.set('type', this.type);
+    // temporaryMap.set('tagCount', this.tagCount);
     temporaryMap.set(
       'histories',
       this.histories.map((v, i) => {
-        return v.toMap();
+        return v.toMapForFireBaseConsideringMultiple();
       }),
     );
     return temporaryMap;
