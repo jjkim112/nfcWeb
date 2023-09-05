@@ -64,7 +64,6 @@ export default function TestPage() {
     //2-2.위치 & 시간 정보 받아와서 맵핑하기
 
     const mapData = await getHistoryMapDataToBeUpdate();
-    console.log(mapData);
 
     //3.updateHistory 라는 함수를 만들것이다. 인풋은 id,type<경로용> 맵화된 시간,시간 위치정보<데이터용>
     // bool isSuccess = await updateHistory(id, type, mapData);

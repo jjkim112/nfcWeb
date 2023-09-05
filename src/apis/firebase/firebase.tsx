@@ -13,20 +13,13 @@ import {
 } from 'firebase/firestore';
 
 const firebaseConfig = {
-  // apiKey: process.env.REACT_APP_API_KEY,
-  // authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  // projectId: process.env.REACT_APP_PROJECT_ID,
-  // storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  // messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  // appId: process.env.REACT_APP_APP_ID,
-  // measurementId: process.env.REACT_APP_MEASUREMENT_ID,
-  apiKey: 'AIzaSyAK4q6l6fMwg9B-9fiYln_F3BX_r73j_Sw',
+  apiKey: process.env.REACT_APP_API_KEY,
   authDomain: 'clip-n-go.firebaseapp.com',
   projectId: 'clip-n-go',
   storageBucket: 'clip-n-go.appspot.com',
-  messagingSenderId: '1032534954960',
-  appId: '1:1032534954960:web:36bed96cac3c2d018d1fd5',
-  measurementId: 'G-J1NP0THR92',
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 firebase.initializeApp(firebaseConfig);
