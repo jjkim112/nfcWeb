@@ -4,11 +4,10 @@ import {
   testUpdateData,
 } from 'apis/firebase/firebase';
 import { OneHistory } from 'domain/OneHistory';
-import { NfcUserInfo } from 'domain/nfcUserInfo';
+
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import DeviceInfo from 'react-native-device-info';
-import { getUniqueId } from 'react-native-device-info';
 
 import { useSearchParams } from 'react-router-dom';
 
@@ -28,9 +27,7 @@ export default function TestPage() {
     try {
       const data = await getPosition();
       //deviceid가져오는것
-      const deviceData = await DeviceInfo.getUniqueId().then((uniqueId) => {
-        return uniqueId;
-      });
+      const deviceData = await DeviceInfo.getUniqueId();
       return {
         lat: data.coords.latitude,
         lon: data.coords.longitude,
