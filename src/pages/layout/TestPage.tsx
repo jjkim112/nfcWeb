@@ -4,16 +4,15 @@ import {
   testUpdateData,
 } from 'apis/firebase/firebase';
 import { OneHistory } from 'domain/OneHistory';
-
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import DeviceInfo from 'react-native-device-info';
-
+import { deviceDetect } from 'mobile-device-detect';
 import { useSearchParams } from 'react-router-dom';
 
 export default function TestPage() {
   const [serachParams, setSerachParams] = useSearchParams();
   const [testBool, setTestBool] = useState(false);
+  const [testInfo, setTestInfo] = useState();
 
   function getPosition(): Promise<any> {
     return new Promise((resolve, reject) =>
@@ -27,7 +26,7 @@ export default function TestPage() {
     try {
       const data = await getPosition();
       //deviceid가져오는것
-      const deviceData = await DeviceInfo.getUniqueId();
+      const deviceData = await deviceDetect();
       return {
         lat: data.coords.latitude,
         lon: data.coords.longitude,
@@ -55,7 +54,8 @@ export default function TestPage() {
 
     //2-2.위치 & 시간 정보 받아와서 맵핑하기
     const mapData = await getHistoryMapDataToBeUpdate();
-
+    console.log(mapData?.deviceId);
+    setTestInfo(mapData?.deviceId);
     //3.updateHistory 라는 함수를 만들것이다. 인풋은 id,type<경로용> 맵화된 시간,시간 위치정보<데이터용>
     // bool isSuccess = await updateHistory(id, type, mapData);
     //http://localhost:3000/test?id=4981d82551390&typeId=aswaswasw
@@ -76,15 +76,15 @@ export default function TestPage() {
     // );
 
     //3-1-b.update하기
+    //////////////////////////////////////////////////////////
+    // const isSuccess = await testUpdateData(
+    //   'nO4H4EPp61LWam9Nsd8t',
+    //   'ssm3-020f268b-a64e-45b3',
+    //   newHistoryData,
+    // );
 
-    const isSuccess = await testUpdateData(
-      'nO4H4EPp61LWam9Nsd8t',
-      'ssm3-020f268b-a64e-45b3',
-      newHistoryData,
-    );
-
-    setTestBool(isSuccess);
-
+    // setTestBool(isSuccess);
+    ////////////////////////////////////////////////////////
     //3-2.firebase에서 제공하는 arrayUnion 활용하기
 
     //4. 리다이렉트 하기
@@ -98,5 +98,11 @@ export default function TestPage() {
     return <Navigate to="/" replace={true} />;
   }
 
-  return <div>테스트중입니다</div>;
+  return (
+    <div>
+      테스트중입니다
+      <br /> 정보는 {JSON.stringify(testInfo)}
+      {/* <br /> 정보는 {testInfo} */}
+    </div>
+  );
 }

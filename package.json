@@ -13,6 +13,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.4.0",
     "firebase": "^10.1.0",
+    "mobile-device-detect": "^0.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-device-info": "^10.9.0",
