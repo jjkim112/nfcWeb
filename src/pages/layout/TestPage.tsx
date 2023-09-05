@@ -7,12 +7,15 @@ import { OneHistory } from 'domain/OneHistory';
 import { NfcUserInfo } from 'domain/nfcUserInfo';
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import DeviceInfo from 'react-native-device-info';
+import { getUniqueId } from 'react-native-device-info';
 
 import { useSearchParams } from 'react-router-dom';
 
 export default function TestPage() {
   const [serachParams, setSerachParams] = useSearchParams();
   const [testBool, setTestBool] = useState(false);
+
   function getPosition(): Promise<any> {
     return new Promise((resolve, reject) =>
       navigator.geolocation.getCurrentPosition(resolve, reject),
@@ -24,11 +27,15 @@ export default function TestPage() {
     // const nowDate = new Date(nowTime);
     try {
       const data = await getPosition();
-
+      //deviceid가져오는것
+      const deviceData = await DeviceInfo.getUniqueId().then((uniqueId) => {
+        return uniqueId;
+      });
       return {
         lat: data.coords.latitude,
         lon: data.coords.longitude,
         updateTime: Number(data.timestamp),
+        deviceId: deviceData,
       };
     } catch (error) {
       //TODO 에러떳을때 처음인 경우 위치수락하시겠습니까? 뜨도록 ->이거불가능해 안해
@@ -40,6 +47,7 @@ export default function TestPage() {
     //2.유저가 링크 접속시 id,type,위치,시간 받아서 저장, 위치,시간은 map화한다
     const id: string | null = serachParams.get('id');
     const categoryId: string | null = serachParams.get('categoryId');
+    // const deviceId: string | null =
 
     // if (id === null || categoryId === null) {
     //   return;
@@ -61,6 +69,7 @@ export default function TestPage() {
       mapData?.lat,
       mapData?.lon,
       new Date(mapData?.updateTime ?? 0),
+      mapData?.deviceId ?? 'No device info',
     );
 
     // const isSuccess = await testSetData(
@@ -72,8 +81,8 @@ export default function TestPage() {
     //3-1-b.update하기
 
     const isSuccess = await testUpdateData(
-      'aswaswasw',
-      '4981d82551390',
+      'nO4H4EPp61LWam9Nsd8t',
+      'ssm3-020f268b-a64e-45b3',
       newHistoryData,
     );
 

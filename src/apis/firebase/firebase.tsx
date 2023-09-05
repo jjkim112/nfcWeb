@@ -43,7 +43,7 @@ const testSetData: (
     historiesData?.push(newHistoryData);
 
     await fireStore
-      .collection('categories')
+      .collection('campaigns')
       .doc(uid)
       .collection('products')
       .doc(id)
@@ -64,7 +64,7 @@ const testReadData: (
   typeId: string,
   id: string,
 ) => Promise<NfcUserInfo | null> = async (typeId: string, id: string) => {
-  const stationRef = doc(fireStore, 'categories', typeId, 'products', id);
+  const stationRef = doc(fireStore, 'campaigns', typeId, 'products', id);
   const docSnap = await getDoc(stationRef);
 
   if (docSnap.exists()) {
@@ -96,7 +96,7 @@ export const testUpdateData: (
     historiesData?.push(newHistoryData);
 
     await fireStore
-      .collection('categories')
+      .collection('campaigns')
       .doc(uid)
       .collection('products')
       .doc(id)
