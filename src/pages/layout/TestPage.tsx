@@ -102,7 +102,6 @@ export default function TestPage() {
     <div>
       테스트중입니다
       <br /> 정보는 {JSON.stringify(testInfo)}
-      {/* <br /> 정보는 {testInfo} */}
     </div>
   );
 }
